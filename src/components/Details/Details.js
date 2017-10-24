@@ -4,10 +4,11 @@ import { connect } from "react-redux";
 import "./Details.css"
 
 import { addToCart } from "../../ducks/product";
+import {Link} from 'react-router-dom';
 
 export function Details( { addToCart, history, products, match } ) {
 
-	const product = {}
+	const product = products.find(product => product.name === match.params.name)
 
 	const {
 		  description
@@ -17,22 +18,32 @@ export function Details( { addToCart, history, products, match } ) {
 		, price
 	} = product;
 
+	function addToCartandRedirect() {
+		
+		addToCart(id)
+		history.goBack();
+	}
+
 	return (
 		<div className="details">
-			<h3 className="details__back-to-shop">Back to shop</h3>
+			<Link to="/shop" >
+				<h3 className="details__back-to-shop">Back to shop</h3>
+			</Link>
 			<img
-				alt={ "" /* products name */ }
+				alt={ name }
 				className="details__logo"
-				src={ "" /* products logo */ }
+				src={ logo }
 			/>
-		<h1 className="details__name">{ /* products name*/ }</h1>
-			<p className="details__description">{ /* products description*/ }</p>
-			<button
-				className="details__buy"
-				onClick={ addToCart( id ) }
-			>
-				Buy now for ${ /* products price */ }!
-			</button>
+		<h1 className="details__name">{ name }</h1>
+			<p className="details__description">{ description }</p>
+			
+				<button
+					className="details__buy"
+					onClick={ addToCartandRedirect }
+				>
+					Buy now for ${ price }!
+				</button>
+			
 		</div>
 	);
 }
